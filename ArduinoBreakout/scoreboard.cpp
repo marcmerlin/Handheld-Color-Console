@@ -33,7 +33,7 @@ class Scoreboard {
     Scoreboard()
     {
       level = 1;
-      lives = 4;
+      lives = 9;
       score = 0;
     }
   

@@ -23,11 +23,12 @@
 
 #include <Arduino.h>
 
-#define XPIN  0
-#define YPIN  1
-#define FIREPIN 2
+#define XPIN  39
+#define YPIN  34
+#define FIREPIN 0
 
-#define CENTER  512
+// Center on my IoTuz board
+#define CENTER  1785
 
 class Joystick
 {
@@ -79,11 +80,17 @@ class Joystick
     static int getPosition (int pin)
     {
       int n = analogRead(pin);
+//      Serial.print(n);
     
       n -= CENTER;
+//      Serial.print(" > ");
+//      Serial.print(n);
     
-      n /= 128;
+      n /= 512;
+//      Serial.print(" > ");
+//      Serial.println(n);
     
+      // Analog 0-4096 is turned into 1>9 for a speed to the left, -1>-6 for a speed to the right
       return n;
     }
 };

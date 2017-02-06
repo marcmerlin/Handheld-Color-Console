@@ -2,7 +2,7 @@
   2012 Copyright (c) Seeed Technology Inc.
 */
 
-#include <avr/pgmspace.h>
+#include <pgmspace.h>
 
 const unsigned char simpleFont[][8] PROGMEM=
 {

@@ -187,8 +187,14 @@ class Breakout
         }
 
         const int m = js.getX();
+	// m is 0 for no movement, negative for left, positive for right
+	//Serial.print("Joystick: ");
+	//Serial.println(m);
+	// ESP32 is too fast and moves the ball too quickly, not giving a chance to move the paddle
+	delay(7);
         if (waited > PADDLE_MOVE_WAIT && m != 0)
         {
+  	  //Serial.println("move paddle");
           last = millis();
           paddle.draw(m);
         }

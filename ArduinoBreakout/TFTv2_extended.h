@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #else
 #include <WProgram.h>
 #endif
-#include <avr/pgmspace.h>
+#include <pgmspace.h>
 
 #include <SPI.h>
 
@@ -97,6 +97,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define TFT_BL_ON   {DDRE |= 0x40;PORTE |=  0x40;}
 #define TFT_RST_OFF {DDRD |= 0x10;PORTD |=  0x10;}
 #define TFT_RST_ON  {DDRD |= 0x10;PORTD &=~ 0x10;}
+
+#elif defined(ESP32)
+
+#define TFT_CS_LOW  digitalWrite(TFT_CS, LOW);
+#define TFT_CS_HIGH digitalWrite(TFT_CS, HIGH);
+#define TFT_DC_LOW  digitalWrite(TFT_DC, LOW);
+#define TFT_DC_HIGH digitalWrite(TFT_DC, HIGH);
+#define TFT_BL_OFF  
+#define TFT_BL_ON   
+#define TFT_RST_OFF digitalWrite(TFT_RST, HIGH)
+#define TFT_RST_ON  digitalWrite(TFT_RST, LOW)
 
 #else
 
