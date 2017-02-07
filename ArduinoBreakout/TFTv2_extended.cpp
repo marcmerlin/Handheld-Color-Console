@@ -379,9 +379,9 @@ void TFT::setPage(INT16U StartPage, INT16U EndPage)
 
 void TFT::fillScreen(INT16U color)
 {
-	tft.setCol(0, MAX_X);
-	tft.setPage(0, MAX_Y);
-	tft.sendCMD(0x2c);	/* start to write to display ra */
+	tft2.setCol(0, MAX_X);
+	tft2.setPage(0, MAX_Y);
+	tft2.sendCMD(0x2c);	/* start to write to display ra */
 	/* m                            */
 	TFT_DC_HIGH;
 	TFT_CS_LOW;
@@ -517,9 +517,9 @@ void TFT::fillRectangle(INT16U x, INT16U y, INT16U w, INT16U h, INT16U color)
 	XY = (XR - XL + 1);
 	XY = XY * (YD - YU + 1);
 
-	tft.setCol(XL, XR);
-	tft.setPage(YU, YD);
-	tft.sendCMD(0x2c);	/* start to write to display ram */
+	tft2.setCol(XL, XR);
+	tft2.setPage(YU, YD);
+	tft2.sendCMD(0x2c);	/* start to write to display ram */
 
 	TFT_DC_HIGH;
 	TFT_CS_LOW;
@@ -545,9 +545,9 @@ void TFT::fillRectangleUseBevel(INT16U x, INT16U y, INT16U w, INT16U h,
 	if (y2 > MAX_Y)
 		y2 = MAX_Y;
 
-	tft.setCol(x, x2);
-	tft.setPage(y, y2);
-	tft.sendCMD(0x2c);
+	tft2.setCol(x, x2);
+	tft2.setPage(y, y2);
+	tft2.sendCMD(0x2c);
 
 	TFT_DC_HIGH;
 	TFT_CS_LOW;
@@ -880,7 +880,7 @@ void TFT::scrollArea(uint16_t top, uint16_t bottom)
 	sendDATA(bottom);
 }
 
-TFT tft = TFT();
+TFT tft2 = TFT();
 /*********************************************************************************************************
 END FILE
 *********************************************************************************************************/

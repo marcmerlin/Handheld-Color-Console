@@ -41,22 +41,22 @@ class Scoreboard {
     {
       // draw back wall and sidewalls
 
-      tft.drawString("     000000000    0",       0, 4, 2, BLACK);
-      tft.drawString("   S            L    B",   6, 4, 2, BLUE);
-      tft.drawString("              0    1   4",  0, 4, 2, RED);
+      tft2.drawString("     000000000    0",       0, 4, 2, BLACK);
+      tft2.drawString("   S            L    B",   6, 4, 2, BLUE);
+      tft2.drawString("              0    1   4",  0, 4, 2, RED);
     }
   
     void update( int scored ){
       score+= scored;
       int digits = nDigits(score);
-      tft.drawNumber(score, (15-digits)*12, 4, 2, RED, SCOREBOARD_COLOR);
+      tft2.drawNumber(score, (15-digits)*12, 4, 2, RED, SCOREBOARD_COLOR);
     }
   
     void nextLevel()
     {
       level++;
       int digits = nDigits(level);
-      tft.drawNumber(level,(20-digits)*12, 4, 2, RED, SCOREBOARD_COLOR);
+      tft2.drawNumber(level,(20-digits)*12, 4, 2, RED, SCOREBOARD_COLOR);
     }
   
     void died()
@@ -64,7 +64,7 @@ class Scoreboard {
       lives--;
       if ( lives < 0) return;
       int digits = nDigits(lives);
-      tft.drawNumber(lives,(24-digits)*12, 4, 2, RED, SCOREBOARD_COLOR);
+      tft2.drawNumber(lives,(24-digits)*12, 4, 2, RED, SCOREBOARD_COLOR);
     }
 
     boolean hasLivesLeft()

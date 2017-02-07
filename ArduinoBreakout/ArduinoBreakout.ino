@@ -27,7 +27,7 @@
 void setup() {
   
   TFT_BL_ON;      // turn on the background light
-  tft.init();  // init TFT library
+  tft2.init();  // init TFT library
 
   Joystick::init();
 
@@ -42,14 +42,14 @@ void loop() {
   const int len = strlen (bo) * FONT_SPACE * 6;
   const int left = (MAX_X - len ) / 2;
 
-  tft.drawStringWithShadow(bo, left, 78, 6, WHITE, BLACK);
+  tft2.drawStringWithShadow(bo, left, 78, 6, WHITE, BLACK);
 
   boolean go = false;
   do
   {
     animateScreen();
 
-    tft.drawCenteredString("Press fire to play!", 136, 2, CYAN);
+    tft2.drawCenteredString("Press fire to play!", 136, 2, CYAN);
 
     unsigned long last = millis();
     do
@@ -71,20 +71,20 @@ void drawWallTiles()
   for ( int c = 0; c <  320; c+=40)
   {
     
-    tft.fillRectangle(c+0, 0, 39, 240, RED);
+    tft2.fillRectangle(c+0, 0, 39, 240, RED);
 
     for ( int i = 20; i < 240; i+= 20)
     {
-      tft.drawHorizontalLine(c+0, i, 40, GRAY2);
-      tft.drawHorizontalLine(c+0, i+1, 40, GRAY2);
+      tft2.drawHorizontalLine(c+0, i, 40, GRAY2);
+      tft2.drawHorizontalLine(c+0, i+1, 40, GRAY2);
     }
 
     for ( int i = 0; i < 240; i+= 40)
     {
-      tft.drawVerticalLine(c+20, i, 20, GRAY2 );
-      tft.drawVerticalLine(c+21, i, 20, GRAY2 );
-      tft.drawVerticalLine(c+39, i+20, 20, GRAY2 );
-      tft.drawVerticalLine(c+38, i+20, 20, GRAY2 );
+      tft2.drawVerticalLine(c+20, i, 20, GRAY2 );
+      tft2.drawVerticalLine(c+21, i, 20, GRAY2 );
+      tft2.drawVerticalLine(c+39, i+20, 20, GRAY2 );
+      tft2.drawVerticalLine(c+38, i+20, 20, GRAY2 );
     }
   }
 }
@@ -94,10 +94,10 @@ void animateScreen()
   int addr = 320;
   while(addr >= 0 && !Joystick::fire())
   {
-    tft.scroll(addr);
+    tft2.scroll(addr);
     addr-=2;
     
     delay(10);
   }
-  tft.scroll(0);
+  tft2.scroll(0);
 }

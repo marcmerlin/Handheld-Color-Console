@@ -33,7 +33,7 @@ void setup() {
 
   TFT_BL_ON;      // turn on the background light
 
-  tft.init();  // init TFT library
+  tft2.init();  // init TFT library
 
   // play turnon sound	
   Beeping::turnOn();
@@ -69,18 +69,18 @@ void loop() {
 
 void drawPreGameScreen()
 {
-  tft.fillScreen(WHITE);
-  tft.drawCenteredString("Tetris", 40, 8, BLUE);
-  tft.drawCenteredString("Click to play", 110, 2, BLACK);
-  tft.drawCenteredString("http://vilaca.eu", 220, 2, PURPLE);
+  tft2.fillScreen(WHITE);
+  tft2.drawCenteredString("Tetris", 40, 8, BLUE);
+  tft2.drawCenteredString("Click to play", 110, 2, BLACK);
+  tft2.drawCenteredString("http://vilaca.eu", 220, 2, PURPLE);
 }
 
 
 void gameOver()
 {
-  tft.fillRectangle(32, 84, 256, 52, BLACK);
-  tft.drawString("Game Over", 48, 94, 4, 0x3ffff);
-  tft.drawRectangle(32, 84, 256, 52, RED);
+  tft2.fillRectangle(32, 84, 256, 52, BLACK);
+  tft2.drawString("Game Over", 48, 94, 4, 0x3ffff);
+  tft2.drawRectangle(32, 84, 256, 52, RED);
 
   Beeping::beep(600, 200);
   delay(300);

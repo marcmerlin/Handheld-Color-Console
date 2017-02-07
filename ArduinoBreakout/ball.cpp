@@ -46,12 +46,12 @@ class Ball
 
     void clear()
     {
-      tft.fillRectangle(x, y, BALL_R * 2, BALL_R * 2, BLACK);
+      tft2.fillRectangle(x, y, BALL_R * 2, BALL_R * 2, BLACK);
     }
   
     void draw()
     {
-      tft.fillRectangle(x, y, BALL_R * 2, BALL_R * 2, BALL_COLOR);
+      tft2.fillRectangle(x, y, BALL_R * 2, BALL_R * 2, BALL_COLOR);
     }
 
     void setXY(int x_, int y_)
@@ -195,7 +195,7 @@ class Ball
       ty*= TILE_H;
       ty+= TILES_TOP;
 
-      tft.fillRectangle(TILES_LEFT + tx * TILE_W, ty, TILE_W - 2, TILE_H - 2, BACKGROUND_COLOR);
+      tft2.fillRectangle(TILES_LEFT + tx * TILE_W, ty, TILE_W - 2, TILE_H - 2, BACKGROUND_COLOR);
         
       const int ty2= ty + TILE_H;
 

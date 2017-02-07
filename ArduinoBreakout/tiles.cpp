@@ -60,7 +60,7 @@ class Tiles {
           continue;
         }
 
-        tft.fillRectangle(TILES_LEFT + c * TILE_W, TILES_TOP + r * TILE_H, TILE_W - 2, TILE_H - 2, COLORS[r]);
+        tft2.fillRectangle(TILES_LEFT + c * TILE_W, TILES_TOP + r * TILE_H, TILE_W - 2, TILE_H - 2, COLORS[r]);
         tiles[r][c]= TILE_IS_DRAWN;
         tilesLeftToDraw--;
 

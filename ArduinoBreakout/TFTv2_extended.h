@@ -186,7 +186,7 @@ class TFT
   void scrollArea(uint16_t top, uint16_t bottom);
 };
 
-extern TFT tft;
+extern TFT tft2;
 
 #endif
 

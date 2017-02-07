@@ -41,10 +41,10 @@ class Paddle
         if ( m < -(x - PADDLE_W)) m = -(x - PADDLE_W);
 
         // remove part of the old paddle on the left
-        tft.fillRectangle( x + PADDLE_W + m, y, -m, PADDLE_H, BACKGROUND_COLOR);
+        tft2.fillRectangle( x + PADDLE_W + m, y, -m, PADDLE_H, BACKGROUND_COLOR);
       
         // add a bit more to the left of the existing paddle
-        tft.fillRectangle( x - PADDLE_W + m, y, -m, PADDLE_H, PADDLE_COLOR);
+        tft2.fillRectangle( x - PADDLE_W + m, y, -m, PADDLE_H, PADDLE_COLOR);
       
         // remember m < 0
         x+=m;
@@ -55,10 +55,10 @@ class Paddle
         if ( m > MAX_X - x - PADDLE_W ) m = MAX_X - x - PADDLE_W;
       
         // remove a part of the old paddle on the right
-        tft.fillRectangle( x - PADDLE_W, y, m, PADDLE_H, BACKGROUND_COLOR);
+        tft2.fillRectangle( x - PADDLE_W, y, m, PADDLE_H, BACKGROUND_COLOR);
       
         // add a bit more  of paddle to the left of the existing paddle
-        tft.fillRectangle( x + PADDLE_W, y, m, PADDLE_H, PADDLE_COLOR );
+        tft2.fillRectangle( x + PADDLE_W, y, m, PADDLE_H, PADDLE_COLOR );
       
         x+=m;
       }
@@ -69,7 +69,7 @@ class Paddle
   
     void draw()
     {
-      tft.fillRectangle(x- PADDLE_W, y, PADDLE_W * 2, PADDLE_H, PADDLE_COLOR);
+      tft2.fillRectangle(x- PADDLE_W, y, PADDLE_W * 2, PADDLE_H, PADDLE_COLOR);
     }
   
     void setXY(int x_, int y_)

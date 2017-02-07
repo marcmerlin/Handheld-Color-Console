@@ -55,11 +55,11 @@ class Breakout
 
       // blank board
 
-      tft.fillRectangle(0,            0, MAX_X,             BOARD_TOP,            SCOREBOARD_COLOR);
-      tft.fillRectangle(0,            0, BOARD_LEFT - 1,    MAX_Y - PADDLE_H - 2, SCOREBOARD_COLOR);
-      tft.fillRectangle(BOARD_RIGHT,  0, TILE_W / 2,        MAX_Y - PADDLE_H - 2, SCOREBOARD_COLOR);
-      tft.fillRectangle(BOARD_LEFT, BOARD_TOP, BOARD_RIGHT - BOARD_LEFT , MAX_Y - BOARD_TOP - PADDLE_H, BACKGROUND_COLOR);
-      tft.fillRectangle(0, MAX_Y - PADDLE_H, MAX_X, MAX_Y, BACKGROUND_COLOR);
+      tft2.fillRectangle(0,            0, MAX_X,             BOARD_TOP,            SCOREBOARD_COLOR);
+      tft2.fillRectangle(0,            0, BOARD_LEFT - 1,    MAX_Y - PADDLE_H - 2, SCOREBOARD_COLOR);
+      tft2.fillRectangle(BOARD_RIGHT,  0, TILE_W / 2,        MAX_Y - PADDLE_H - 2, SCOREBOARD_COLOR);
+      tft2.fillRectangle(BOARD_LEFT, BOARD_TOP, BOARD_RIGHT - BOARD_LEFT , MAX_Y - BOARD_TOP - PADDLE_H, BACKGROUND_COLOR);
+      tft2.fillRectangle(0, MAX_Y - PADDLE_H, MAX_X, MAX_Y, BACKGROUND_COLOR);
 
       score.init();
 
@@ -85,8 +85,8 @@ class Breakout
       {
         if ( go[i] != ' ')
         {
-          tft.fillRectangle(cursor, 94, FONT_SPACE * font_size - 2, FONT_X * font_size, RED);
-          tft.drawChar(go[i], cursor - FONT_SPACE / 2, 94 + FONT_SPACE / 2, font_size, WHITE);    
+          tft2.fillRectangle(cursor, 94, FONT_SPACE * font_size - 2, FONT_X * font_size, RED);
+          tft2.drawChar(go[i], cursor - FONT_SPACE / 2, 94 + FONT_SPACE / 2, font_size, WHITE);    
         }
       
         cursor += font_size * FONT_SPACE;
