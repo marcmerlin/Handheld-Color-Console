@@ -2,7 +2,11 @@
   2012 Copyright (c) Seeed Technology Inc.
 */
 
+#if defined(ESP32)
 #include <pgmspace.h>
+#else
+#include <avr/pgmspace.h>
+#endif
 
 const unsigned char simpleFont[][8] PROGMEM=
 {

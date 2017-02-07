@@ -1,37 +1,40 @@
 /*
 
-  Edited by João Vilaça.
-  
-  Currently an work in progress, a few changes were done: 
-  - LED pin moved to pin 9 on Atmega 328;
-  - Screen orientation rotated 90/270º on initialization;
-  - Added a few new methods;
-  - ...
+Edited by João Vilaça.
+
+Currently an work in progress, a few changes were done:
+- LED pin moved to pin 9 on Atmega 328;
+- Screen orientation rotated 90/270º on initialization;
+- Added a few new methods;
+- ...
 
 */
 /*
- 2012 Copyright (c) Seeed Technology Inc.
+2012 Copyright (c) Seeed Technology Inc.
 
- Authors: Albert.Miao & Loovee, 
- Visweswara R (with initializtion code from TFT vendor)
+Authors: Albert.Miao & Loovee,
+Visweswara R (with initializtion code from TFT vendor)
 
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version.
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
 
- You should have received a copy of the GNU Lesser General Public
- License along with this library; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 */
 #ifndef TFTv2_h
 #define TFTv2_h
+
+#define FONT_SPACE 6
+#define FONT_X 8
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #define SEEEDUINO
@@ -39,34 +42,32 @@
 #else
 #include <WProgram.h>
 #endif
-#include <avr/pgmspace.h>
+#include <pgmspace.h>
 
 #include <SPI.h>
 
-//Basic Colors
 #define BLACK       0x0000
-#define BLUE	    0x001f
-#define CYAN		0x07ff	
-#define DARKCYAN    0x03EF      /*   0, 128, 128 */
-#define DARKGREEN	0x03E0
-#define DARKGREY    0x7BEF      /* 128, 128, 128 */
-#define GRAY1		0x8410  
-#define GRAY2		0x4208  
-#define GRAY3		0x2104  
+#define BLUE	      0x001f
+#define CYAN		    0x07ff
+#define DARKCYAN    0x03EF
+#define DARKGREEN	  0x03E0
+#define DARKGREY    0x7BEF
+#define GRAY1		    0x8410
+#define GRAY2		    0x4208
+#define GRAY3		    0x2104
 #define GREEN       0x07e0
-#define LIGHTGREEN  0xAFE5      /* 173, 255,  47 */
-#define LIGHTGREY   0xC618      /* 192, 192, 192 */
-#define MAGENTA     0xF81F      /* 255,   0, 255 */
-#define MAROON      0x7800      /* 128,   0,   0 */
-#define NAVY        0x000F      /*   0,   0, 128 */
-#define OLIVE       0x7BE0      /* 128, 128,   0 */
-#define ORANGE      0xFD20      /* 255, 165,   0 */
-#define PURPLE      0x780F      /* 128,   0, 128 */
+#define LIGHTGREEN  0xAFE5
+#define LIGHTGREY   0xC618
+#define MAGENTA     0xF81F
+#define MAROON      0x7800
+#define NAVY        0x000F
+#define OLIVE       0x7BE0
+#define ORANGE      0xFD20
+#define PURPLE      0x780F
 #define RED         0xf800
 #define WHITE       0xffff
 #define YELLOW      0xffe0
 
-//TFT resolution 240*320
 #define MIN_X	0
 #define MIN_Y	0
 #define MAX_X	319
@@ -96,6 +97,17 @@
 #define TFT_BL_ON   {DDRE |= 0x40;PORTE |=  0x40;}
 #define TFT_RST_OFF {DDRD |= 0x10;PORTD |=  0x10;}
 #define TFT_RST_ON  {DDRD |= 0x10;PORTD &=~ 0x10;}
+
+#elif defined(ESP32)
+
+#define TFT_CS_LOW  digitalWrite(TFT_CS, LOW);
+#define TFT_CS_HIGH digitalWrite(TFT_CS, HIGH);
+#define TFT_DC_LOW  digitalWrite(TFT_DC, LOW);
+#define TFT_DC_HIGH digitalWrite(TFT_DC, HIGH);
+#define TFT_BL_OFF  
+#define TFT_BL_ON   
+#define TFT_RST_OFF digitalWrite(TFT_RST, HIGH)
+#define TFT_RST_ON  digitalWrite(TFT_RST, LOW)
 
 #else
 
@@ -133,40 +145,45 @@ extern INT8U simpleFont[][8];
 
 class TFT
 {
-public:
-	void init (void);
-	void setCol(INT16U StartCol,INT16U EndCol);
-	void setPage(INT16U StartPage,INT16U EndPage);
-	void setXY(INT16U poX, INT16U poY);
-	void setPixel(INT16U poX, INT16U poY,INT16U color);
-	void sendCMD(INT8U index);
-	//void sendPackage(INT16U *data,INT8U howmany);
-	void sendDATA(INT8U data);
-	void sendData(INT16U data);
-	INT8U readRegister(INT8U Addr,INT8U xParameter);
-	void fillScreen(INT16U color);
-	INT8U readID(void);
+  public:
+  void init (void);
+  void setCol(INT16U StartCol,INT16U EndCol);
+  void setPage(INT16U StartPage,INT16U EndPage);
+  void setXY(INT16U poX, INT16U poY);
+  void setPixel(INT16U poX, INT16U poY,INT16U color);
+  void sendCMD(INT8U index);
+  //void sendPackage(INT16U *data,INT8U howmany);
+  void sendDATA(INT8U data);
+  void sendData(INT16U data);
+  INT8U readRegister(INT8U Addr,INT8U xParameter);
+  void fillScreen(INT16U color);
+  INT8U readID(void);
 
-	void drawChar(INT8U ascii,INT16U poX, INT16U poY,INT16U size, INT16U fgcolor);
-	void drawString(char *string,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
-	void drawStringWithShadow(char *string,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U shcolor );
-	void drawCenteredString(char *string, INT16U poY,INT16U size,INT16U fgcolor );
-	void fillRectangle(INT16U poX, INT16U poY, INT16U length, INT16U width, INT16U color);
-	void fillRectangleUseBevel(INT16U poX, INT16U poY, INT16U length, INT16U width, INT16U color);
+  void drawChar(INT8U ascii,INT16U poX, INT16U poY,INT16U size, INT16U fgcolor);
+  void drawChar(INT8U ascii,INT16U poX, INT16U poY,INT16U size, INT16U fgcolor, INT16U bgcolor);
+  void drawString(char *string,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
+  void drawStringWithShadow(char *string,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor, INT16U shcolor );
+  void drawCenteredString(char *string, INT16U poY,INT16U size,INT16U fgcolor );
+  void fillRectangle(INT16U poX, INT16U poY, INT16U length, INT16U width, INT16U color);
+  void fillRectangleUseBevel(INT16U poX, INT16U poY, INT16U length, INT16U width, INT16U color);
 
-	void drawLine(INT16U x0,INT16U y0,INT16U x1,INT16U y1,INT16U color);
-	void drawVerticalLine(INT16U poX, INT16U poY,INT16U length,INT16U color);
-	void drawHorizontalLine(INT16U poX, INT16U poY,INT16U length,INT16U color);
-	void drawRectangle(INT16U poX, INT16U poY, INT16U length,INT16U width,INT16U color);
-	void drawRectangle(INT16U poX, INT16U poY, INT16U length,INT16U width,INT16U color, byte thickness);
+  void drawLine(INT16U x0,INT16U y0,INT16U x1,INT16U y1,INT16U color);
+  void drawVerticalLine(INT16U poX, INT16U poY,INT16U length,INT16U color);
+  void drawHorizontalLine(INT16U poX, INT16U poY,INT16U length,INT16U color);
+  void drawRectangle(INT16U poX, INT16U poY, INT16U length,INT16U width,INT16U color);
+  void drawRectangle(INT16U poX, INT16U poY, INT16U length,INT16U width,INT16U color, byte thickness);
 
-	void drawCircle(int poX, int poY, int r,INT16U color);
-	void fillCircle(int poX, int poY, int r,INT16U color);
+  void drawCircle(int poX, int poY, int r,INT16U color);
+  void fillCircle(int poX, int poY, int r,INT16U color);
 
-	void drawTriangle(int poX1, int poY1, int poX2, int poY2, int poX3, int poY3, INT16U color);
-	INT8U drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
-	INT8U drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
-	INT8U drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
+  void drawTriangle(int poX1, int poY1, int poX2, int poY2, int poX3, int poY3, INT16U color);
+  INT8U drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
+  INT8U drawNumber(long long_num,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor,INT16U bgcolor);
+  INT8U drawFloat(float floatNumber,INT8U decimal,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
+  INT8U drawFloat(float floatNumber,INT16U poX, INT16U poY,INT16U size,INT16U fgcolor);
+
+  void scroll(int position);
+  void scrollArea(uint16_t top, uint16_t bottom);
 };
 
 extern TFT Tft;
@@ -174,5 +191,5 @@ extern TFT Tft;
 #endif
 
 /*********************************************************************************************************
-  END FILE
+END FILE
 *********************************************************************************************************/

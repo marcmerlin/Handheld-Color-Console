@@ -18,24 +18,18 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 #ifndef JOYSTICKCPP
 #define JOYSTICKCPP
 
 #include <Arduino.h>
 
-// analog pins
+#define XPIN  39
+#define YPIN  34
+#define FIREPIN 0
 
-#define XPIN        0
-#define YPIN        1
-
-// digital pin
-
-#define FIREPIN     2
-
-// joystick center for both axis
-
-#define CENTER      512
+// Center on my IoTuz board
+#define CENTERX  1785
+#define CENTERY  1854
 
 class Joystick
 {
@@ -60,7 +54,7 @@ class Joystick
 
     static int getY()
     {
-      return getPosition(YPIN) * -1;
+      return getPosition(YPIN);
     }
 
     static boolean fire()
@@ -93,11 +87,21 @@ class Joystick
 
     static int getPosition (int pin)
     {
-      const int n = analogRead(pin) - CENTER;
-
-      return n / 128;
+      int n = analogRead(pin);
+//      Serial.print(n);
+    
+      if (pin == XPIN) n -= CENTERX;
+      if (pin == YPIN) n -= CENTERY;
+//      Serial.print(" > ");
+//      Serial.print(n);
+    
+      n /= 512;
+//      Serial.print(" > ");
+//      Serial.println(n);
+    
+      // Analog 0-4096 is turned into 1>9 for a speed to the left, -1>-6 for a speed to the right
+      return n;
     }
 };
 
 #endif
-

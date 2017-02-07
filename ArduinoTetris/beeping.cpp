@@ -98,30 +98,30 @@ class Beeping
 
     static void beep(int frq, int d)
     {
-      tone(SPEAKER, frq, d);
+      //tone(SPEAKER, frq, d);
       delay( d);
     }
 
     static void mute()
     {
-      noTone(SPEAKER);
+      //noTone(SPEAKER);
     }
 
     static void turnOn()
     {
       for (int i = 250; i < 2500; i += 100)
       {
-        tone(SPEAKER, i, 10);
+        //tone(SPEAKER, i, 10);
         delay(10);
-        tone(SPEAKER, i / 2, 10);
+        //tone(SPEAKER, i / 2, 10);
         delay(20);
       }
 
-      tone(SPEAKER, 1000, 50);
+      //tone(SPEAKER, 1000, 50);
       delay(100);
-      tone(SPEAKER, 2000, 50);
+      //tone(SPEAKER, 2000, 50);
       delay(100);
-      tone(SPEAKER, 500, 50);
+      //tone(SPEAKER, 500, 50);
       delay(100);
     }
 };

@@ -33,8 +33,96 @@
 
 */
 
-#include "TFTv2_extended.h"
 #include <SPI.h>
+#include <Wire.h>
+
+// LCD brightness control and touchscreen CS are behind the port
+// expander, as well as both push buttons
+#define I2C_EXPANDER 0x20 //0100000 (7bit) address of the IO expander on i2c bus
+
+/* Port expander PCF8574, access via I2C on */
+#define I2CEXP_ACCEL_INT    0x01 // (In)
+#define I2CEXP_A_BUT	    0x02 // (In)
+#define I2CEXP_B_BUT	    0x04 // (In)
+#define I2CEXP_ENC_BUT	    0x08 // (In)
+#define I2CEXP_SD_CS	    0x10 // (Out)
+#define I2CEXP_TOUCH_INT    0x20 // (In)
+#define I2CEXP_TOUCH_CS	    0x40 // (Out)
+#define I2CEXP_LCD_BL_CTR   0x80 // (Out)
+
+// Dealing with the I/O expander is a bit counter intuitive. There is no difference between a
+// write meant to toggle an output port, and a write designed to turn off pull down resistors and trigger
+// a read request.
+// The write just before the read should have bits high on the bits you'd like to read back, but you
+// may get high bits back on other bits you didn't turn off the pull down resistor on. This is normal.
+// Just filter out the bits you're trying to get from the value read back and keep in mind that when
+// you write, you should still send the right bit values for the output pins.
+// This is all stored in i2cexp which we initialize to the bits used as input:
+#define I2CEXP_IMASK ( I2CEXP_ACCEL_INT + I2CEXP_A_BUT + I2CEXP_B_BUT + I2CEXP_ENC_BUT + I2CEXP_TOUCH_INT )
+// Any write to I2CEXP should contain those mask bits so allow reads to work later
+uint8_t i2cexp = I2CEXP_IMASK;
+
+// I2C/TWI success (transaction was successful).
+#define ku8TWISuccess    0
+// I2C/TWI device not present (address sent, NACK received).
+#define ku8TWIDeviceNACK 2
+// I2C/TWI data not received (data sent, NACK received).
+#define ku8TWIDataNACK   3
+// I2C/TWI other error.
+#define ku8TWIError      4
+
+void pcf8574_write(uint8_t dt){
+    uint8_t error;
+
+    Wire.beginTransmission(I2C_EXPANDER);
+    // Serial.print("Writing to I2CEXP: ");
+    // Serial.println(dt);
+    Wire.write(dt);
+    error = Wire.endTransmission();
+    if (error != ku8TWISuccess) {
+	// FIXME: do something here if you like
+    }
+}
+
+// To clear bit #7, send 128
+void i2cexp_clear_bits(uint8_t bitfield) {
+    // set bits to clear to 0, all other to 1, binary and to clear the bits
+    i2cexp &= (~bitfield);
+    pcf8574_write(i2cexp);
+}
+
+// To set bit #7, send 128
+void i2cexp_set_bits(uint8_t bitfield) {
+    i2cexp |= bitfield;
+    pcf8574_write(i2cexp);
+}
+
+uint8_t i2cexp_read() {
+    // For read to work, we must have sent 1 bits on the ports that get used as input
+    // This is done by i2cexp_clear_bits called in setup.
+    Wire.requestFrom(I2C_EXPANDER, 1); // FIXME: deal with returned error here?
+    while (Wire.available() < 1) ;
+    uint8_t read = ~Wire.read(); // Apparently one has to invert the bits read
+    // When no buttons are pushed, this returns 0x91, which includes some ports
+    // we use as output, so we do need to filter out the ports used as read.
+    // Serial.println(read, HEX);
+    return read;
+}
+
+// TFT + Touch Screen Setup Start
+// These are the minimal changes from v0.1 to get the LCD working
+#define TFT_DC 4
+#define TFT_CS 19
+#define TFT_RST 32
+// SPI Pins are shared by TFT, touch screen, SD Card
+#define SPI_MISO 12
+#define SPI_MOSI 13
+#define SPI_CLK 14
+
+// ---------------------------------------------------------------------------------------------
+
+
+#include "TFTv2_extended.h"
 #define FONT_SPACE 6
 #define FONT_X 8
 
@@ -101,14 +189,46 @@ INT8U TFT::readRegister(INT8U Addr, INT8U xParameter)
 
 void TFT::init (void)
 {
-    SPI.begin();
+    Serial.begin(115200);
+    Serial.println("Serial Begin"); 
+
+    pinMode(SPI_MOSI, OUTPUT);
+    pinMode(SPI_MISO, INPUT);
+    pinMode(SPI_CLK, OUTPUT);
+
+    // TFT Setup
+    pinMode(TFT_CS, OUTPUT);
+    pinMode(TFT_DC, OUTPUT);
+    pinMode(TFT_RST, OUTPUT);
+
+    // ESP32 requires an extended begin with pin mappings (which is not supported by the
+    // adafruit library), so we do an explicit begin here and then the other SPI libraries work
+    // with hardware SPI as setup here (they will do a second begin without pin mappings and
+    // that will be ignored).
+    SPI.begin(SPI_CLK, SPI_MISO, SPI_MOSI);
+
+    // Until further notice, there is a hack to get HW SPI be as fast as SW SPI:
+    // in espressif/esp32/cores/esp32/esp32-hal.h after the first define, add
+    // #define CONFIG_DISABLE_HAL_LOCKS 1
+    // Use with caution, this may cause unknown issues
+
+    Wire.begin();
+    // LCD backlight is inverted logic,
+    // This turns the backlight off
+    // i2cexp_set_bits(I2CEXP_LCD_BL_CTR);
+    // And this turns it on
+    i2cexp_clear_bits(I2CEXP_LCD_BL_CTR);
+    // Note this also initializes the read bits on PCF8574 by setting them to 1 as per I2CEXP_IMASK
+
     TFT_CS_HIGH;
     TFT_DC_HIGH;
     INT8U i=0, TFTDriver=0;
 
-	TFT_RST_ON;
-	delay(10);
-	TFT_RST_OFF;
+  TFT_RST_OFF;
+  delay(5);
+  TFT_RST_ON;
+  delay(20);
+  TFT_RST_OFF;
 
     for(i=0;i<3;i++)
     {
@@ -236,17 +356,15 @@ INT8U TFT::readID(void)
             ToF=0;
         }
     }
-    /*
-    if(!ToF)
-    {
-        Serial.print("Read TFT ID failed, ID should be 0x09341, but read ID = 0x");
-        for(i=0;i<3;i++)
-        {
-            Serial.print(data[i],HEX);
-        }
-        Serial.println();
-    }
-    */
+  if(!ToF)
+  {
+	  Serial.print("Read TFT ID returned 0x");
+	  for(i=0;i<3;i++)
+	  {
+		  Serial.print(data[i],HEX);
+	  }
+	  Serial.println();
+  }
     return ToF;
 }
 

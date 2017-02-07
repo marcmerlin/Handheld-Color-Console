@@ -46,10 +46,10 @@
 #define PIT_COLOR             CYAN
 #define BG_COLOR              BLACK
 
-#define DROP_WAIT_INIT        1100
+#define DROP_WAIT_INIT        600
 
-#define INPUT_WAIT_ROT        300
-#define INPUT_WAIT_MOVE       150
+#define INPUT_WAIT_ROT        500
+#define INPUT_WAIT_MOVE       300
 
 #define INPUT_WAIT_NEW_SHAPE  400
 
@@ -325,8 +325,13 @@ class Tetris
     unsigned long waited = now - lastInput;
 
     int jx = Joystick::getX();    
+    //Serial.print("Got jx: ");
+    //Serial.println(jx);
 
-    int move = INPUT_WAIT_MOVE / jx;
+    int move = jx;
+    if (move) move = INPUT_WAIT_MOVE / jx;
+    //Serial.print("Got move: ");
+    //Serial.println(move);
 
     if ( jx < Joystick::NEUTRAL && waited > -move)
     {

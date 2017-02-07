@@ -24,7 +24,7 @@
 
 #include "joystick.cpp"
 #include "beeping.cpp"
-#include "tetris.cpp"
+#include "Tetris.cpp"
 #include "sequencer.cpp"
 
 void setup() {
@@ -92,8 +92,10 @@ void gameOver()
 }
 
 
+#if 0
 ISR(TIMER1_COMPA_vect) {
 
   // sequencer plays tetris theme
   Sequencer::play();
 }
+#endif

@@ -172,6 +172,7 @@ class Sequencer {
 
     static void init() {
       
+#if 0
       // enable timer, used to play music sequencer async
       TCCR1A = 0; // No options in control register A
       TCCR1B = (1 << CS10); // Set prescaler to divide by 8
@@ -181,6 +182,7 @@ class Sequencer {
 
       last = c = w = 0;
       songOn = false;
+#endif
     }
 
     static void start() {
