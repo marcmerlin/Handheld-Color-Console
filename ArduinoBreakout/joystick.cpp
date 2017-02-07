@@ -22,14 +22,7 @@
 #define JOYSTICKCPP
 
 #include <Arduino.h>
-
-#define XPIN  39
-#define YPIN  34
-#define FIREPIN 0
-
-// Center on my IoTuz board
-#define CENTERX  1785
-#define CENTERY  1854
+#include "iotuz.h"
 
 class Joystick
 {
@@ -44,22 +37,22 @@ class Joystick
 
     static void init ()
     {
-      pinMode ( FIREPIN, INPUT_PULLUP );
+      pinMode ( JOYSTICK_BUT_PIN, INPUT_PULLUP );
     }
 
     static int getX()
     {
-      return getPosition(XPIN) * -1;
+      return getPosition(JOYSTICK_X_PIN) * -1;
     }
 
     static int getY()
     {
-      return getPosition(YPIN);
+      return getPosition(JOYSTICK_Y_PIN);
     }
 
     static boolean fire()
     {
-      return digitalRead(FIREPIN) == LOW;
+      return digitalRead(JOYSTICK_BUT_PIN) == LOW;
     }
 
     static void waitForRelease()
@@ -90,8 +83,8 @@ class Joystick
       int n = analogRead(pin);
 //      Serial.print(n);
     
-      if (pin == XPIN) n -= CENTERX;
-      if (pin == YPIN) n -= CENTERY;
+      if (pin == JOYSTICK_X_PIN) n -= JOYSTICK_CENTERX;
+      if (pin == JOYSTICK_Y_PIN) n -= JOYSTICK_CENTERY;
 //      Serial.print(" > ");
 //      Serial.print(n);
     
