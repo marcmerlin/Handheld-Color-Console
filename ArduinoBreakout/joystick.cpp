@@ -1,7 +1,7 @@
 /*
-    Arduino Breakout
-    Copyright (C) 2015 João André Esteves Vilaça
-
+    Arduino Tetris
+    Copyright (C) 2015 João André Esteves Vilaça 
+    
     https://github.com/vilaca/Handheld-Color-Console
 
     This program is free software; you can redistribute it and/or modify
@@ -28,11 +28,19 @@
 #define FIREPIN 0
 
 // Center on my IoTuz board
-#define CENTER  1785
+#define CENTERX  1785
+#define CENTERY  1854
 
 class Joystick
 {
   public:
+
+    // joystick position constants 
+    
+    static const int NEUTRAL = 0;
+    static const int SOFT = 1;
+    static const int HARD = 2;
+    static const int HARDER = 3;
 
     static void init ()
     {
@@ -46,7 +54,7 @@ class Joystick
 
     static int getY()
     {
-      return getPosition(YPIN) * -1;
+      return getPosition(YPIN);
     }
 
     static boolean fire()
@@ -82,7 +90,8 @@ class Joystick
       int n = analogRead(pin);
 //      Serial.print(n);
     
-      n -= CENTER;
+      if (pin == XPIN) n -= CENTERX;
+      if (pin == YPIN) n -= CENTERY;
 //      Serial.print(" > ");
 //      Serial.print(n);
     

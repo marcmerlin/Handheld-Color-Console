@@ -1,6 +1,6 @@
 /*
     Arduino Tetris
-    Copyright (C) 2015  Jo„o AndrÈ Esteves VilaÁa
+    Copyright (C) 2015 Jo√£o Andr√© Esteves Vila√ßa
 
     https://github.com/vilaca/Handheld-Color-Console
 
@@ -33,7 +33,7 @@ void setup() {
 
   TFT_BL_ON;      // turn on the background light
 
-  Tft.init();  // init TFT library
+  tft.init();  // init TFT library
 
   // play turnon sound	
   Beeping::turnOn();
@@ -69,18 +69,18 @@ void loop() {
 
 void drawPreGameScreen()
 {
-  Tft.fillScreen(WHITE);
-  Tft.drawCenteredString("Tetris", 40, 8, BLUE);
-  Tft.drawCenteredString("Click to play", 110, 2, BLACK);
-  Tft.drawCenteredString("http://vilaca.eu", 220, 2, PURPLE);
+  tft.fillScreen(WHITE);
+  tft.drawCenteredString("Tetris", 40, 8, BLUE);
+  tft.drawCenteredString("Click to play", 110, 2, BLACK);
+  tft.drawCenteredString("http://vilaca.eu", 220, 2, PURPLE);
 }
 
 
 void gameOver()
 {
-  Tft.fillRectangle(32, 84, 256, 52, BLACK);
-  Tft.drawString("Game Over", 48, 94, 4, 0x3ffff);
-  Tft.drawRectangle(32, 84, 256, 52, RED);
+  tft.fillRectangle(32, 84, 256, 52, BLACK);
+  tft.drawString("Game Over", 48, 94, 4, 0x3ffff);
+  tft.drawRectangle(32, 84, 256, 52, RED);
 
   Beeping::beep(600, 200);
   delay(300);

@@ -178,14 +178,14 @@ class Tetris
     int c = LCD_HEIGHT / 28;
     for (int i = LCD_HEIGHT - 1; i >= 0; i -= 2)
     {
-      Tft.fillRectangle(0, i, LCD_WIDTH, 2, 0x1f - i / c);
+      tft.fillRectangle(0, i, LCD_WIDTH, 2, 0x1f - i / c);
     }
 
-    Tft.fillRectangle(BOARD_LEFT, 0, BOARD_RIGHT-BOARD_LEFT-1, BOARD_BOTTOM, BG_COLOR);
+    tft.fillRectangle(BOARD_LEFT, 0, BOARD_RIGHT-BOARD_LEFT-1, BOARD_BOTTOM, BG_COLOR);
 
     // draw board left limit
     
-    Tft.drawLine (
+    tft.drawLine (
       BOARD_LEFT - 1,
       BOARD_TOP,
       BOARD_LEFT - 1,
@@ -194,7 +194,7 @@ class Tetris
 
     // draw board right limit
     
-    Tft.drawLine (
+    tft.drawLine (
       BOARD_RIGHT,
       BOARD_TOP,
       BOARD_RIGHT,
@@ -203,7 +203,7 @@ class Tetris
 
     // draw board bottom limit
     
-    Tft.drawLine (
+    tft.drawLine (
       BOARD_LEFT - 1,
       BOARD_BOTTOM,
       BOARD_RIGHT + 1,
@@ -212,7 +212,7 @@ class Tetris
 
     for ( int i = BOARD_LEFT + BLOCK_SIZE - 1; i < BOARD_RIGHT; i += BLOCK_SIZE)
     {
-      Tft.drawLine (
+      tft.drawLine (
         i,
         BOARD_TOP,
         i,
@@ -222,7 +222,7 @@ class Tetris
 
     for ( int i = BOARD_TOP + BLOCK_SIZE - 1; i < BOARD_BOTTOM; i += BLOCK_SIZE)
     {
-      Tft.drawLine (
+      tft.drawLine (
         BOARD_LEFT,
         i,
         BOARD_RIGHT - 1,
@@ -247,14 +247,14 @@ class Tetris
         chooseNewShape();
 
         // draw next box
-        Tft.fillRectangle(30, 100, BLOCK_SIZE * 6, BLOCK_SIZE * 5, BLACK);
-        Tft.drawRectangle(29, 99, BLOCK_SIZE * 6 + 1, BLOCK_SIZE * 5 + 1, WHITE);
+        tft.fillRectangle(30, 100, BLOCK_SIZE * 6, BLOCK_SIZE * 5, BLACK);
+        tft.drawRectangle(29, 99, BLOCK_SIZE * 6 + 1, BLOCK_SIZE * 5 + 1, WHITE);
 
         byte *shape = all_shapes[next[next_c]];
         for ( int i = 0; i < 4; i++ )
         {
           byte *block = shape + i * 2;
-          Tft.fillRectangleUseBevel(
+          tft.fillRectangleUseBevel(
             30 + BLOCK_SIZE + block[0]*BLOCK_SIZE,
             100 + BLOCK_SIZE + block[1]*BLOCK_SIZE,
             BLOCK_SIZE - 2,
@@ -415,7 +415,7 @@ class Tetris
     {
       byte *block = (shape + (rot * 4 + i) * 2);
 
-      Tft.fillRectangleUseBevel(
+      tft.fillRectangleUseBevel(
         BOARD_LEFT + block[0]*BLOCK_SIZE + BLOCK_SIZE * x,
         BOARD_TOP + block[1]*BLOCK_SIZE + BLOCK_SIZE * y,
         BLOCK_SIZE - 2,
@@ -433,7 +433,7 @@ class Tetris
       if ( board[block[1] + old.y][block[0] + old.x] == 255 )
       continue;
 
-      Tft.fillRectangle(
+      tft.fillRectangle(
         BOARD_LEFT + block[0]*BLOCK_SIZE + BLOCK_SIZE * old.x,
         BOARD_TOP + block[1]*BLOCK_SIZE + BLOCK_SIZE * old.y,
         BLOCK_SIZE - 2,
@@ -520,7 +520,7 @@ class Tetris
           byte v = board[row - 1][c];
 
           board[row][c] = v;
-          Tft.fillRectangleUseBevel(
+          tft.fillRectangleUseBevel(
             BOARD_LEFT + BLOCK_SIZE * c,
             BOARD_TOP + BLOCK_SIZE * row,
             BLOCK_SIZE - 2,
@@ -535,7 +535,7 @@ class Tetris
         board[0][c] = 0;
       }
 
-      Tft.fillRectangle(
+      tft.fillRectangle(
         BOARD_LEFT,
         0,
         BOARD_RIGHT - BOARD_LEFT,
@@ -548,12 +548,12 @@ class Tetris
 
   void scoreBoard()
   {
-    Tft.fillRectangle(6, 3, 128, 50, BLACK);
-    Tft.drawString("Level", 8, 8, 2, YELLOW);
-    Tft.drawString("Lines", 8, 32, 2, 0x3f);
-    Tft.drawNumber(level, 74, 8, 2, YELLOW);
-    Tft.drawNumber(lines, 74, 32, 2, 0x3f);
-    Tft.drawRectangle(5, 2, 130, 52, 0xffff);
+    tft.fillRectangle(6, 3, 128, 50, BLACK);
+    tft.drawString("Level", 8, 8, 2, YELLOW);
+    tft.drawString("Lines", 8, 32, 2, 0x3f);
+    tft.drawNumber(level, 74, 8, 2, YELLOW);
+    tft.drawNumber(lines, 74, 32, 2, 0x3f);
+    tft.drawRectangle(5, 2, 130, 52, 0xffff);
   }
 
   // create a sequence of 7 random shapes

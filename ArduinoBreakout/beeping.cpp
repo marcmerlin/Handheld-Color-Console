@@ -1,6 +1,6 @@
 /*
-    Arduino Breakout
-    Copyright (C) 2015 João André Esteves Vilaça
+    Arduino Tetris
+    Copyright (C) 2015  João André Esteves Vilaça
 
     https://github.com/vilaca/Handheld-Color-Console
 
@@ -99,6 +99,7 @@ class Beeping
     static void beep(int frq, int d)
     {
       //tone(SPEAKER, frq, d);
+      delay( d);
     }
 
     static void mute()
@@ -116,6 +117,16 @@ class Beeping
         delay(20);
       }
 
+#if 0
+// Tetris
+      //tone(SPEAKER, 1000, 50);
+      delay(100);
+      //tone(SPEAKER, 2000, 50);
+      delay(100);
+      //tone(SPEAKER, 500, 50);
+      delay(100);
+#endif
+// Breakout
       Beeping::beep(NOTE_C4,40);
       Beeping::beep(NOTE_F4,40);
       Beeping::beep(NOTE_G4,40);
